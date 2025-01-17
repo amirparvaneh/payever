@@ -38,7 +38,7 @@ This project is a NestJS-based application for managing invoices and generating 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/invoice-management-system.git
+   git clone https://github.com/amirparvaneh/payever.git
    cd invoice-management-system
    ```
 
