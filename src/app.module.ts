@@ -8,6 +8,7 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { EmailModule } from './email/email.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailConsumerService } from './email-consumer/email-consumer.service';
+import { EmailSenderModule } from './email-sender/email-sender.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { EmailConsumerService } from './email-consumer/email-consumer.service';
     RabbitmqModule,
     InvoiceModule,
     EmailModule,
+    EmailSenderModule,
   ],
   controllers: [AppController],
   providers: [AppService, RabbitMQService, EmailConsumerService],
