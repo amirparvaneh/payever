@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RabbitModule } from './rabbit/rabbit.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RabbitmqService } from './rabbitmq/rabbitmq.service';
 import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
-import { RabbitmqService } from './rabbitmq/rabbitmq.service';
+import { InvoiceModule } from './invoice/invoice.module';
+import { EmailModule } from './email/email.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    RabbitModule,
+    RabbitmqModule,
+    ScheduleModule.forRoot(),
     MongooseModule.forRoot('mongodb://localhost:27017/sales-invoice-app'),
     RabbitmqModule,
+    InvoiceModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService, RabbitmqService],
