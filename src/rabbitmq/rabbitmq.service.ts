@@ -4,25 +4,42 @@ import {
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
+import { Channel, Connection } from 'amqplib';
 
 @Injectable()
-export class RabbitmqService {
+export class RabbitMQService {
   private client: ClientProxy;
+  private connection: Connection;
+  private channel: Channel;
 
   constructor() {
-    this.client = ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'sales_queue',
-        queueOptions: {
-          durable: true,
-        },
-      },
-    });
+    this.initialize();
   }
 
-  async sendMessage(pattern: string, data: any): Promise<any> {
-    return this.client.send(pattern, data).toPromise();
+  private async initialize() {
+    try {
+      const amqp = require('amqplib');
+      this.connection = await amqp.connect('amqp://localhost');
+      this.channel = await this.connection.createChannel();
+    } catch (error) {
+      console.error('Failed to initialize RabbitMQ connection', error);
+    }
+  }
+
+  async publish(queue: string, message: any) {
+    if (!this.channel) {
+      throw new Error('RabbitMQ channel is not initialized');
+    }
+
+    await this.channel.assertQueue(queue, { durable: true });
+    this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {
+      persistent: true,
+    });
+  }
+  async getChannel(): Promise<Channel> {
+    if (!this.channel) {
+      throw new Error('RabbitMQ channel is not initialized');
+    }
+    return this.channel;
   }
 }

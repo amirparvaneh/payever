@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RabbitmqService } from './rabbitmq/rabbitmq.service';
+import { RabbitMQService } from './rabbitmq/rabbitmq.service';
 import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { EmailModule } from './email/email.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EmailConsumerService } from './email-consumer/email-consumer.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     EmailModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RabbitmqService],
+  providers: [AppService, RabbitMQService, EmailConsumerService],
 })
 export class AppModule {}
